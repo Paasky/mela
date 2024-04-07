@@ -9,7 +9,7 @@
 2. `composer install`
 3. `php artisan key:generate`
 4. `php artisan migrate`
-5. `php artisan db:seeed`
+5. `php artisan db:seed`
 7. `npm install`
 8. `npm run build`
 9. `php artisan serve`
@@ -23,3 +23,5 @@ perhaps there's a browser setting preventing JS alerts?
 - I modified the code slightly to show the selected codes in the button title,
 while the "correct" way would be to set up an html modal to pop up,
 rather than a JS alert.
+- I've added full RESTful API functionality with tests, though only index is consumed
+  - Although making country codes updatable is questionable, as they require translations
