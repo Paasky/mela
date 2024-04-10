@@ -33,7 +33,6 @@
                                     fetch('/countries')
                                         .then((response) => response.json())
                                         .then((data) => {
-                                            console.log(data);
                                             setCountries(data);
                                         })
                                         .catch((e) => {
@@ -43,8 +42,16 @@
                                 }, []);
 
                                 // Keep track of selected Countries and user Search
-                                // noinspection JSMismatchedCollectionQueryUpdate
-                                const selectedCodes = [];
+                                const [selectedCodes, setSelectedCodes] = React.useState([]);
+                                const handleCheckboxChange = (code) => {
+                                    if (selectedCodes.includes(code)) {
+                                        selectedCodes.splice(selectedCodes.indexOf(code), 1);
+                                    } else {
+                                        selectedCodes.push(code);
+                                    }
+                                    setSelectedCodes(selectedCodes);
+                                }
+
                                 const [search, setSearch] = React.useState();
 
                                 return <table className="w-full">
@@ -60,18 +67,20 @@
                                     <CountryCheckboxList
                                         countries={countries}
                                         selectedCodes={selectedCodes}
+                                        handleCheckboxChange={handleCheckboxChange}
                                         search={search}
                                     />
                                     </tbody>
                                 </table>
                             }
 
-                            const Checkbox = ({ label, onChange }) => {
+                            const Checkbox = ({ label, defaultChecked, onChange }) => {
                                 return (
                                     <label>
                                         <input
                                             type="checkbox"
                                             className="mr-1"
+                                            defaultChecked={defaultChecked}
                                             onChange={onChange}
                                         />
                                         {label}
@@ -79,15 +88,7 @@
                                 )
                             }
 
-                            const CountryCheckboxList = ({ countries, selectedCodes, search }) => {
-                                const handleCheckboxChange = (code) => {
-                                    if (selectedCodes.includes(code)) {
-                                        selectedCodes.splice(selectedCodes.indexOf(code), 1);
-                                    } else {
-                                        selectedCodes.push(code);
-                                    }
-                                }
-
+                            const CountryCheckboxList = ({ countries, selectedCodes, handleCheckboxChange, search }) => {
                                 return (countries
                                         .filter((country) => !search
                                             || country.name.toLowerCase().includes(search.toLowerCase())
@@ -100,6 +101,7 @@
                                                     <Checkbox
                                                         key={country.code}
                                                         label={country.code}
+                                                        defaultChecked={selectedCodes.includes(country.code)}
                                                         onChange={() => handleCheckboxChange(country.code)}
                                                     />
                                                 </td>
